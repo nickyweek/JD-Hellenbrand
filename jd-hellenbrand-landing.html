@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD Hellenbrand — Get On The Lake</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0d1b2a;
+    --deep: #0a1520;
+    --water: #1a4a6b;
+    --water-light: #2d7aad;
+    --gold: #c9a84c;
+    --gold-light: #e8c87a;
+    --white: #f4f1eb;
+    --muted: #8a9bb0;
+    --border: rgba(255,255,255,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 80px 8vw;
+    overflow: hidden;
+  }
+
+  /* Animated water background */
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(170deg, #0d1b2a 0%, #0a2a40 40%, #0d3a5a 70%, #0a2a40 100%);
+  }
+  .wave {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 200px; z-index: 1;
+  }
+  .wave svg { width: 100%; height: 100%; }
+
+  /* Ripple circles */
+  .ripple {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(45, 122, 173, 0.15);
+    animation: ripple-out 8s ease-out infinite;
+  }
+  .ripple:nth-child(1) { width: 300px; height: 300px; bottom: 10%; right: 15%; animation-delay: 0s; }
+  .ripple:nth-child(2) { width: 500px; height: 500px; bottom: 5%; right: 10%; animation-delay: 2s; }
+  .ripple:nth-child(3) { width: 700px; height: 700px; bottom: 0%; right: 5%; animation-delay: 4s; }
+
+  @keyframes ripple-out {
+    0% { opacity: 0.4; transform: scale(0.8); }
+    100% { opacity: 0; transform: scale(1.2); }
+  }
+
+  /* Sun/glow effect */
+  .glow {
+    position: absolute; top: -100px; right: -100px;
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    z-index: 1;
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 680px; }
+
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 32px; height: 1px; background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.0;
+    font-weight: 900;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--gold);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 17px; line-height: 1.8; color: var(--muted);
+    max-width: 500px; margin-bottom: 48px;
+    opacity: 0; animation: fadeUp 0.6s ease 0.6s forwards;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.6s ease 0.8s forwards;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 16px 36px; font-family: 'Barlow', sans-serif;
+    font-size: 13px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-secondary {
+    border: 1px solid rgba(255,255,255,0.2); color: var(--white);
+    padding: 16px 36px; font-family: 'Barlow', sans-serif;
+    font-size: 13px; font-weight: 500; letter-spacing: 2px;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.2s; display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-stat-bar {
+    position: absolute; bottom: 48px; left: 8vw; right: 8vw;
+    display: flex; gap: 48px; z-index: 2;
+    border-top: 1px solid var(--border); padding-top: 32px;
+    opacity: 0; animation: fadeUp 0.6s ease 1s forwards;
+  }
+  .stat { }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; color: var(--gold); font-weight: 700;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* URGENCY BANNER */
+  .urgency {
+    background: var(--gold); color: var(--navy);
+    text-align: center; padding: 14px 20px;
+    font-size: 13px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .urgency span { font-weight: 300; letter-spacing: 0; text-transform: none; margin-left: 8px; }
+
+  /* SERVICES */
+  .services {
+    padding: 100px 8vw;
+    background: var(--navy);
+  }
+  .section-label {
+    font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    margin-bottom: 64px; max-width: 500px; line-height: 1.2;
+  }
+
+  .service-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2px;
+  }
+  .service-card {
+    background: var(--deep); padding: 40px 32px;
+    border-top: 2px solid transparent;
+    transition: border-color 0.2s;
+    cursor: default;
+  }
+  .service-card:hover { border-color: var(--gold); }
+  .service-icon {
+    font-size: 28px; margin-bottom: 20px;
+  }
+  .service-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; margin-bottom: 12px;
+  }
+  .service-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* SOCIAL PROOF */
+  .reviews {
+    padding: 100px 8vw;
+    background: var(--deep);
+  }
+  .review-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px; margin-top: 64px;
+  }
+  .review-card {
+    background: var(--navy); padding: 36px;
+    border-left: 3px solid var(--gold);
+  }
+  .stars { color: var(--gold); font-size: 14px; margin-bottom: 16px; letter-spacing: 2px; }
+  .review-text { font-size: 14px; line-height: 1.8; color: var(--muted); margin-bottom: 20px; font-style: italic; }
+  .review-author { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--white); font-weight: 500; }
+
+  /* CTA SECTION */
+  .cta-section {
+    padding: 120px 8vw;
+    background: var(--navy);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(45,122,173,0.12) 0%, transparent 70%);
+  }
+  .cta-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    margin-bottom: 20px; position: relative; z-index: 1;
+  }
+  .cta-section h2 em { font-style: italic; color: var(--gold); }
+  .cta-section p { color: var(--muted); font-size: 16px; margin-bottom: 48px; position: relative; z-index: 1; }
+
+  .contact-box {
+    display: inline-flex; flex-direction: column; align-items: center;
+    gap: 20px; position: relative; z-index: 1;
+  }
+  .phone-link {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    color: var(--gold); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .phone-link:hover { color: var(--gold-light); }
+  .phone-sub { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    background: var(--deep); border-top: 1px solid var(--border);
+    padding: 40px 8vw;
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 12px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; color: var(--white);
+  }
+  .footer-logo span { color: var(--gold); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .hero { padding: 60px 6vw; }
+    .hero-stat-bar { display: none; }
+    .services, .reviews, .cta-section { padding: 72px 6vw; }
+    footer { flex-direction: column; gap: 16px; text-align: center; padding: 32px 6vw; }
+    .hero-ctas { flex-direction: column; }
+    .btn-primary, .btn-secondary { text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="urgency">
+  Memorial Day is coming fast —<span>spots are filling up. Book your spring install now.</span>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="glow"></div>
+  <div class="ripple"></div>
+  <div class="ripple"></div>
+  <div class="ripple"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Southern Wisconsin's Lake Experts</p>
+    <h1>Get Your Dock In.<br><em>Before the Rush.</em></h1>
+    <p class="hero-sub">JD Hellenbrand installs, removes, and repairs docks and boat lifts across Lake Wisconsin, Lake Monona, Lake Waubesa, and Lake Kegonsa. Free estimates. Fast scheduling.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="tel:6085130690">Call 608-513-0690</a>
+      <a class="btn-secondary" href="https://jdhellenbrand.com/contact-us/">Get a Free Estimate</a>
+    </div>
+  </div>
+
+  <div class="hero-stat-bar">
+    <div class="stat">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Lakes Serviced</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Free</div>
+      <div class="stat-label">Estimates Always</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">All</div>
+      <div class="stat-label">Brands Serviced</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">Fast</div>
+      <div class="stat-label">Scheduling</div>
+    </div>
+  </div>
+</section>
+
+<section class="services">
+  <p class="section-label">What We Do</p>
+  <h2 class="section-title">Everything Your Waterfront Needs</h2>
+  <div class="service-grid">
+    <div class="service-card">
+      <div class="service-icon">🚤</div>
+      <div class="service-name">Dock Installation</div>
+      <p class="service-desc">Spring install handled start to finish. We photograph and document every property for accurate setup year after year.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚓</div>
+      <div class="service-name">Boat Lift Install</div>
+      <p class="service-desc">New lifts, used lifts, all brands. We'll recommend the right lift for your boat and waterfront conditions.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <div class="service-name">Repairs & Maintenance</div>
+      <p class="service-desc">Specialize in Hewitt, Endres, and Clearwater — but we service everything. Fast turnaround, no waiting.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">❄️</div>
+      <div class="service-name">Fall Removal</div>
+      <p class="service-desc">We pull it, store it, and put it right back in the spring. One less thing to deal with before the season ends.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏗️</div>
+      <div class="service-name">Barge Services</div>
+      <p class="service-desc">Emergency situations, tight spots, deep water access. Our barge crane gets to places others can't.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛒</div>
+      <div class="service-name">New & Used Equipment</div>
+      <p class="service-desc">Hewitt, Clearwater, Endres, Wave Armor. Every used piece is inspected and serviced before it leaves our hands.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <p class="section-label">What Customers Say</p>
+  <h2 class="section-title">Trusted Around the Lake</h2>
+  <div class="review-grid">
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"I called on a Wednesday, had a quote by 7am Thursday, and the crew was there by 11:30am. They hauled off the old drive unit too. Would not hesitate to do more business with them."</p>
+      <div class="review-author">— Mark Greene</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"After two months of being ignored by my old company, I called JD Hellenbrand. Dan took care of everything in under a week. They now have all of my pier and lift business."</p>
+      <div class="review-author">— Ahnna Weber</div>
+    </div>
+    <div class="review-card">
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"Dan said he'd have the piers installed in about a week — the fastest of all the companies I called. Like magic, it was done. Come on summer and new memories!"</p>
+      <div class="review-author">— Nic Schilling</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <h2>Ready to Get <em>On the Lake?</em></h2>
+  <p>Free estimates. Fast scheduling. No surprises.</p>
+  <div class="contact-box">
+    <a class="phone-link" href="tel:6085130690">608-513-0690</a>
+    <div class="phone-sub">Call or text — Dan answers fast</div>
+    <a class="btn-primary" href="https://jdhellenbrand.com/contact-us/">Request a Free Estimate Online</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">JD <span>Hellenbrand</span></div>
+  <div>N1792 Ryan Road, Lodi WI 53555 &nbsp;·&nbsp; jdhellenbrand@yahoo.com</div>
+  <div>© 2026 JD Hellenbrand</div>
+</footer>
+
+</body>
+</html>
